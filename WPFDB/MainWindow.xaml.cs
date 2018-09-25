@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data.OleDb;
 
 namespace WPFDB
 {
@@ -20,9 +21,54 @@ namespace WPFDB
     /// </summary>
     public partial class MainWindow : Window
     {
+        OleDbConnection cn;
+
         public MainWindow()
         {
             InitializeComponent();
+            cn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\atayl\\source\\repos\\WPFDB\\WPFDB\\CW5.accdb");
+        }
+
+        private void See_Assets_Button_Click(object sender, RoutedEventArgs e)
+        {
+            string query = "select * from Assets";
+            OleDbCommand cmd = new OleDbCommand(query, cn);
+            cn.Open();
+            OleDbDataReader read = cmd.ExecuteReader();
+            string data = "";
+            while (read.Read())
+            {
+                for(int i = 0; i < 3; i++)
+                {
+                    data += read[i].ToString() + "  ";
+                }
+
+                data += "\n";
+
+            }
+            cn.Close();
+            DB_Display_Box.Text = data;
+        }
+
+        private void See_Employees_Button_Click(object sender, RoutedEventArgs e)
+        {
+            string query = "select * from Employees";
+            OleDbCommand cmd = new OleDbCommand(query, cn);
+            cn.Open();
+            OleDbDataReader read = cmd.ExecuteReader();
+            string data = "";
+            while (read.Read())
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    data += read[i].ToString() + "  ";
+                }
+
+                data += "\n";
+
+            }
+            cn.Close();
+            DB_Display_Box.Text = data;
         }
     }
 }
